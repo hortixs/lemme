@@ -1,0 +1,108 @@
+---
+import Base from '../../../layouts/Base.astro';
+import { lien, lireNiveaux, type Chapitre, type Matiere, type Niveau } from '../../../lib/contenu';
+import { enonces } from '../../../components/enonces';
+
+export function getStaticPaths() {
+  return lireNiveaux().flatMap((n) =>
+    n.matieres.flatMap((m) =>
+      m.chapitres.map((c) => ({
+        params: { niveau: n.slug, matiere: m.slug, chapitre: c.slug },
+        props: { n, m, c },
+      })),
+    ),
+  );
+}
+const { n, m, c } = Astro.props as { n: Niveau; m: Matiere; c: Chapitre };
+const Contenu = c.Contenu;
+const Fondamentaux = c.Fondamentaux;
+const auteurs = [...new Set(c.videos.map((v) => v.auteur).filter(Boolean))];
+const embed = (url: string) => {
+  const id = url.match(/[?&]v=([^&]+)/)?.[1] ?? url.match(/youtu\.be\/([^?&]+)/)?.[1];
+  return `https://www.youtube-nocookie.com/embed/${id}?rel=0`;
+};
+---
+<Base titre={c.titre} niveauActif={n.slug} description={`${c.titre} : cours, exercices et vidéos (${n.nom}, ${m.titre}).`}>
+  <div class="colonnes-chapitre">
+    <nav class="menu" aria-label={`Chapitres de ${m.titre}`}>
+      <p>{m.titre}</p>
+      <ol>
+        {m.chapitres.map((x) => (
+          <li>
+            <a href={x.url} aria-current={x.slug === c.slug ? 'page' : undefined}><span class="numero">{x.numero}</span>{x.titre}</a>
+          </li>
+        ))}
+      </ol>
+    </nav>
+
+    <main class="chapitre">
+      <p class="ariane"><a href={lien(`/${n.slug}/`)}>{n.nom}</a> / {m.titre} / {c.numero}</p>
+      <h1>{c.titre}</h1>
+
+      <section class="ressources" aria-label="Ressources du chapitre">
+        {c.cours
+          ? <a class="ressource" href={c.cours}><strong>Cours complet</strong><span>PDF, avec toutes les preuves</span></a>
+          : <div class="ressource absente"><strong>Cours complet</strong><span>Bientôt disponible</span></div>}
+        {c.exercices
+          ? <a class="ressource" href={c.exercices}><strong>Exercices et indications</strong><span>PDF</span></a>
+          : <div class="ressource absente"><strong>Exercices et indications</strong><span>Bientôt disponibles</span></div>}
+        {c.videos.length > 0
+          ? <a class="ressource" href="#videos"><strong>Vidéos</strong><span>{c.videos.length} vidéo{c.videos.length > 1 ? 's' : ''}</span></a>
+          : <div class="ressource absente"><strong>Vidéos</strong><span>Bientôt disponibles</span></div>}
+      </section>
+
+      {c.videos.length > 0 && (
+        <section id="videos" class="section-chapitre">
+          <h2>Vidéos</h2>
+          <iframe
+            id="lecteur"
+            class="video"
+            src={embed(c.videos[0].url)}
+            title={c.videos[0].titre}
+            loading="lazy"
+            allow="accelerometer; encrypted-media; gyroscope; picture-in-picture; fullscreen"
+            referrerpolicy="strict-origin-when-cross-origin"
+            allowfullscreen
+          ></iframe>
+          <ol class="videos-liste">
+            {c.videos.map((v, i) => (
+              <li>
+                <a href={v.url} data-embed={embed(v.url)} aria-current={i === 0 ? 'true' : undefined}>{v.titre}</a>
+                {v.duree && <span class="mono">{v.duree}</span>}
+              </li>
+            ))}
+          </ol>
+          {auteurs.length > 0 && <p class="note">Vidéos de la chaîne {auteurs.join(', ')}.</p>}
+          <script is:inline>
+            document.querySelectorAll('[data-embed]').forEach((lien) => {
+              lien.addEventListener('click', (e) => {
+                e.preventDefault();
+                const lecteur = document.getElementById('lecteur');
+                lecteur.src = lien.dataset.embed;
+                lecteur.title = lien.textContent;
+                document.querySelectorAll('[data-embed]').forEach((l) => l.removeAttribute('aria-current'));
+                lien.setAttribute('aria-current', 'true');
+              });
+            });
+          </script>
+        </section>
+      )}
+
+      {Contenu && (
+        <section class="section-chapitre">
+          <h2>L'essentiel du cours</h2>
+          <p class="note">Les définitions et les résultats à retenir. Les preuves sont dans le PDF.</p>
+          <div class="essentiel"><Contenu components={enonces} /></div>
+        </section>
+      )}
+
+      {Fondamentaux && (
+        <section id="exercices-fondamentaux" class="section-chapitre">
+          <h2>Exercices fondamentaux</h2>
+          <p class="note">À savoir faire en priorité. Les numéros sont ceux du PDF, qui contient tous les exercices.</p>
+          <div class="fondamentaux"><Fondamentaux components={enonces} /></div>
+        </section>
+      )}
+    </main>
+  </div>
+</Base>

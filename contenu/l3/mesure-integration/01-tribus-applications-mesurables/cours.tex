@@ -1,0 +1,602 @@
+\documentclass[11pt]{article}
+\input{../../../commun}
+
+\begin{document}
+\titredoc{L3 · Mesure et intégration}{Tribus et applications mesurables}{Cours}
+
+Dans tout ce chapitre, $X$ et $Y$ sont des ensembles et $I$ est un ensemble non vide. On note $\Parties(X)$ l'ensemble des parties de $X$ :
+\[
+  \Parties(X) := \{A \;:\; A \subset X\}.
+\]
+
+% ------------------------------------------------------------------
+\setcounter{section}{-1}
+\section{Introduction : de Riemann à Lebesgue}
+
+\subsection*{L'intégrale de Riemann}
+
+\begin{definition}
+Une fonction $f : [0,1] \to \R$ est dite \emph{en escalier} s'il existe une subdivision $\sigma = \{x_0 = 0 < x_1 < \dots < x_n = 1\}$ et des réels $c_0,\dots,c_{n-1}$ tels que $f = c_k$ sur $]x_k,x_{k+1}[$ pour tout $k$. Son intégrale est alors
+\[
+  \int_0^1 f(x)\,\mathrm{d}x = \sum_{k=0}^{n-1} (x_{k+1}-x_k)\,c_k.
+\]
+\end{definition}
+
+Soit maintenant $f : [0,1] \to \R$ bornée et $\sigma$ une subdivision de $[0,1]$. On pose $M_k = \sup_{]x_k,x_{k+1}[} f$, $m_k = \inf_{]x_k,x_{k+1}[} f$ et
+\[
+  I_+(\sigma) = \sum_{k=0}^{n-1}(x_{k+1}-x_k)\,M_k,
+  \qquad
+  I_-(\sigma) = \sum_{k=0}^{n-1}(x_{k+1}-x_k)\,m_k,
+  \qquad
+  \mathrm{pas}(\sigma) = \max_{k}\,(x_{k+1}-x_k).
+\]
+On dit que $f$ est \emph{Riemann-intégrable} si $I_+(\sigma) - I_-(\sigma) \to 0$ lorsque $\mathrm{pas}(\sigma) \to 0$.
+
+\begin{exemple}
+Soit $f : x \mapsto x^2$ sur $[0,1]$ et $\sigma_n = \{k/n : 0 \leq k \leq n\}$, de pas $1/n$. Comme $f$ est croissante,
+\[
+  I_- = \frac{1}{n^3}\sum_{k=0}^{n-1}k^2 = \frac{(n-1)(2n-1)}{6n^2},
+  \qquad
+  I_+ = \frac{1}{n^3}\sum_{k=1}^{n}k^2 = \frac{(n+1)(2n+1)}{6n^2}.
+\]
+Ces deux quantités tendent vers $\frac13$, et on retrouve $\int_0^1 x^2\,\mathrm{d}x = \frac13$.
+\end{exemple}
+
+\begin{definition}
+Une fonction $f : [0,1] \to \R$ est dite \emph{réglée} si elle est limite uniforme d'une suite de fonctions en escalier. Les fonctions réglées sont Riemann-intégrables, mais la réciproque est fausse.
+\end{definition}
+
+\subsection*{Les limites de cette théorie}
+
+\begin{enumerate}
+  \item Une fonction Riemann-intégrable est nécessairement bornée.
+  \item L'espace des fonctions Riemann-intégrables n'est stable ni par convergence simple, ni par composition.
+  \item Les théorèmes sur les intégrales à paramètre demandent des hypothèses assez fortes, comme la continuité.
+  \item L'espace des fonctions Riemann-intégrables est compliqué à décrire.
+\end{enumerate}
+
+\begin{exemple}[Stabilité par convergence simple]
+Soit $f = \ind_{\Q\cap[0,1]}$ et $(r_k)_{k\geq 1}$ une énumération de $\Q \cap [0,1]$. Pour $n \geq 1$, la fonction $f_n = \sum_{k=1}^n \ind_{\{r_k\}}$ est en escalier et $\int_0^1 f_n = 0$. De plus, $(f_n)_n$ converge simplement vers $f$ : si $x \notin \Q$, alors $f_n(x) = 0$ pour tout $n$, et si $x = r_{k_0}$, alors $f_n(x) = 1$ dès que $n \geq k_0$.
+
+Pourtant, $f$ n'est pas Riemann-intégrable : sur tout intervalle non trivial, $\sup f = 1$ et $\inf f = 0$, donc $I_+(\sigma) - I_-(\sigma) = 1$ pour toute subdivision $\sigma$. Il semblerait pourtant raisonnable de poser $\int_0^1 f = 0$.
+\end{exemple}
+
+\subsection*{L'idée de Lebesgue}
+
+Pour une fonction en escalier, on peut regrouper les points selon la valeur prise : si $E_i = \{x : f(x) = c_i\}$ et si $\lambda(E_i)$ désigne la « longueur » de $E_i$, alors $\int f = \sum_i c_i\,\lambda(E_i)$.
+
+Lebesgue généralise ce point de vue en découpant l'\emph{arrivée} plutôt que le départ. Si $f$ est à valeurs dans $[a,b[$ et si $t_0 = a < t_1 < \dots < t_n = b$, on pose
+\[
+  E_i = \{x : f(x) \in [t_i,t_{i+1}[\,\} = f^{-1}([t_i,t_{i+1}[).
+\]
+Contrairement au cas de Riemann, $E_i$ n'est pas forcément un intervalle, et il peut être très compliqué. Sur la figure de droite, $E_i$ est en gras sur l'axe horizontal.
+\begin{center}
+\begin{tikzpicture}[scale=0.82]
+\begin{scope}
+\fill[black!15] (0,0) rectangle (0.8,1.738);\draw[black!55] (0,2.103) rectangle (0.8,0);
+\fill[black!15] (0.8,0) rectangle (1.6,1.051);\draw[black!55] (0.8,2.034) rectangle (1.6,0);
+\fill[black!15] (1.6,0) rectangle (2.4,0.646);\draw[black!55] (1.6,1.051) rectangle (2.4,0);
+\fill[black!15] (2.4,0) rectangle (3.2,0.759);\draw[black!55] (2.4,1.975) rectangle (3.2,0);
+\fill[black!15] (3.2,0) rectangle (4,1.975);\draw[black!55] (3.2,2.404) rectangle (4,0);
+\draw[->] (-0.2,0) -- (4.4,0);\draw[->] (0,-0.2) -- (0,2.9);
+\draw[thick] (0.000,1.738) -- (0.067,1.809) -- (0.133,1.875) -- (0.200,1.935) -- (0.267,1.987) -- (0.333,2.031) -- (0.400,2.065) -- (0.467,2.089) -- (0.533,2.101) -- (0.600,2.102) -- (0.667,2.091) -- (0.733,2.069) -- (0.800,2.034) -- (0.867,1.989) -- (0.933,1.932) -- (1.000,1.867) -- (1.067,1.792) -- (1.133,1.710) -- (1.200,1.621) -- (1.267,1.528) -- (1.333,1.432) -- (1.400,1.334) -- (1.467,1.237) -- (1.533,1.142) -- (1.600,1.051) -- (1.667,0.965) -- (1.733,0.887) -- (1.800,0.818) -- (1.867,0.759) -- (1.933,0.711) -- (2.000,0.676) -- (2.067,0.654) -- (2.133,0.646) -- (2.200,0.653) -- (2.267,0.674) -- (2.333,0.710) -- (2.400,0.759) -- (2.467,0.821) -- (2.533,0.896) -- (2.600,0.982) -- (2.667,1.078) -- (2.733,1.182) -- (2.800,1.292) -- (2.867,1.406) -- (2.933,1.524) -- (3.000,1.641) -- (3.067,1.757) -- (3.133,1.869) -- (3.200,1.975) -- (3.267,2.073) -- (3.333,2.161) -- (3.400,2.238) -- (3.467,2.301) -- (3.533,2.351) -- (3.600,2.384) -- (3.667,2.402) -- (3.733,2.402) -- (3.800,2.386) -- (3.867,2.352) -- (3.933,2.302) -- (4.000,2.236);
+\node[below] at (2,-0.25) {\small Riemann : découpe du départ};
+\end{scope}
+\begin{scope}[xshift=7.2cm]
+\fill[black!12] (0,1.15) rectangle (4,1.55);\draw[black!60] (-0.08,1.15) node[left]{\small $t_i$} -- (4,1.15);\draw[black!60] (-0.08,1.55) node[left]{\small $t_{i+1}$} -- (4,1.55);
+\draw[line width=2.2pt] (1.252,0) -- (1.528,0);\draw[black!45,dashed] (1.252,0) -- (1.252,1.549);\draw[black!45,dashed] (1.528,0) -- (1.528,1.149);
+\draw[line width=2.2pt] (2.714,0) -- (2.949,0);\draw[black!45,dashed] (2.714,0) -- (2.714,1.151);\draw[black!45,dashed] (2.949,0) -- (2.949,1.551);
+\draw[->] (-0.2,0) -- (4.4,0);\draw[->] (0,-0.2) -- (0,2.9);
+\draw[thick] (0.000,1.738) -- (0.067,1.809) -- (0.133,1.875) -- (0.200,1.935) -- (0.267,1.987) -- (0.333,2.031) -- (0.400,2.065) -- (0.467,2.089) -- (0.533,2.101) -- (0.600,2.102) -- (0.667,2.091) -- (0.733,2.069) -- (0.800,2.034) -- (0.867,1.989) -- (0.933,1.932) -- (1.000,1.867) -- (1.067,1.792) -- (1.133,1.710) -- (1.200,1.621) -- (1.267,1.528) -- (1.333,1.432) -- (1.400,1.334) -- (1.467,1.237) -- (1.533,1.142) -- (1.600,1.051) -- (1.667,0.965) -- (1.733,0.887) -- (1.800,0.818) -- (1.867,0.759) -- (1.933,0.711) -- (2.000,0.676) -- (2.067,0.654) -- (2.133,0.646) -- (2.200,0.653) -- (2.267,0.674) -- (2.333,0.710) -- (2.400,0.759) -- (2.467,0.821) -- (2.533,0.896) -- (2.600,0.982) -- (2.667,1.078) -- (2.733,1.182) -- (2.800,1.292) -- (2.867,1.406) -- (2.933,1.524) -- (3.000,1.641) -- (3.067,1.757) -- (3.133,1.869) -- (3.200,1.975) -- (3.267,2.073) -- (3.333,2.161) -- (3.400,2.238) -- (3.467,2.301) -- (3.533,2.351) -- (3.600,2.384) -- (3.667,2.402) -- (3.733,2.402) -- (3.800,2.386) -- (3.867,2.352) -- (3.933,2.302) -- (4.000,2.236);
+\node[below] at (2,-0.25) {\small Lebesgue : découpe de l'arrivée};
+\end{scope}
+\end{tikzpicture}
+\end{center}
+
+Si l'on sait mesurer la longueur $\lambda(E_i)$, on s'attend à obtenir l'encadrement
+\[
+  \sum_{i=0}^{n-1} t_i\,\lambda(E_i) \;\leq\; \int f \;\leq\; \sum_{i=0}^{n-1} t_{i+1}\,\lambda(E_i).
+\]
+Il faut donc savoir quelles parties on peut mesurer, et s'assurer que les ensembles $f^{-1}([t_i,t_{i+1}[)$ en font partie. C'est le rôle des tribus et des applications mesurables.
+
+\subsection*{Rappels}
+
+\begin{definition}
+Un ensemble est \emph{dénombrable} s'il est en bijection avec $\N$, et \emph{au plus dénombrable} s'il est fini ou dénombrable. Par exemple, $\N^*$, $\Z$, $\N^2$ et $\Q$ sont dénombrables.
+\end{definition}
+
+Soient $A,B \subset X$. On note $\Compl{A} = X \setminus A$, $A \setminus B = A \cap \Compl{B}$ et $A \,\triangle\, B = (A\setminus B)\cup(B\setminus A)$. L'indicatrice de $A$ est la fonction $\ind_A : X \to \{0,1\}$ valant $1$ sur $A$ et $0$ ailleurs.
+
+Si $f : X \to E$ est une application et $A \subset E$, on note $f^{-1}(A) = \{x \in X : f(x) \in A\} = \{f \in A\}$. L'image réciproque préserve les inclusions, et pour toute famille $(A_i)_{i\in I}$ de parties de $E$ :
+\[
+  f^{-1}\Bigl(\bigcup_{i\in I} A_i\Bigr) = \bigcup_{i\in I} f^{-1}(A_i),
+  \qquad
+  f^{-1}\Bigl(\bigcap_{i\in I} A_i\Bigr) = \bigcap_{i\in I} f^{-1}(A_i),
+  \qquad
+  f^{-1}(E \setminus A) = X \setminus f^{-1}(A).
+\]
+
+Pour une suite réelle $(u_n)_n$, on pose $\limsup_n u_n = \lim_n \sup_{k\geq n} u_k$ et $\liminf_n u_n = \lim_n \inf_{k\geq n} u_k$. Pour une suite $(A_n)_n$ de parties de $X$, on pose
+\[
+  \limsup_{n\to+\infty} A_n = \bigcap_{n\in\N}\bigcup_{k\geq n} A_k,
+  \qquad
+  \liminf_{n\to+\infty} A_n = \bigcup_{n\in\N}\bigcap_{k\geq n} A_k,
+\]
+et on a $\liminf_n A_n \subset \limsup_n A_n$.
+
+% ------------------------------------------------------------------
+\section{Notion de tribu}
+
+\begin{definition}
+Soit $\tA \subset \Parties(X)$ une famille de parties de $X$. On dit que $\tA$ est une \emph{tribu} sur $X$ si :
+\begin{enumerate}[label=\roman*)]
+  \item $\emptyset \in \tA$ ;
+  \item si $B \in \tA$, alors $\Compl{B} \in \tA$ ;
+  \item pour toute suite $(A_n)_{n\in\N} \in \tA^{\N}$, on a $\displaystyle\bigcup_{n\in\N} A_n \in \tA$.
+\end{enumerate}
+Le couple $(X,\tA)$ est alors appelé un \emph{espace mesurable}, et les éléments de $\tA$ sont appelés les parties \emph{mesurables}.
+\end{definition}
+
+\begin{remarque}
+Si $A_0,\dots,A_N \in \tA$, alors $\bigcup_{n=0}^{N} A_n \in \tA$ : on applique iii) en posant $A_n = \emptyset$ pour tout $n \geq N+1$.
+\end{remarque}
+
+\begin{exemple}
+Les familles suivantes sont des tribus sur $X$ :
+\begin{itemize}
+  \item $\{\emptyset, X\}$ ;
+  \item $\Parties(X)$ ;
+  \item $\{\emptyset, X, A, \Compl{A}\}$, pour $A \subset X$.
+\end{itemize}
+De plus, toute tribu $\tA$ sur $X$ vérifie $\{\emptyset, X\} \subset \tA \subset \Parties(X)$.
+\end{exemple}
+
+\begin{exemple}[Contre-exemple]
+Soit $X = \{0,1,2\}$. La famille $\tA = \{\emptyset, \{0\}, \{1\}, \{1,2\}, X\}$ n'est pas une tribu sur $X$. En effet, $\Compl{\{1\}} = \{0,2\} \notin \tA$.
+
+La plus petite tribu contenant $\tA$ est $\Parties(X)$ : elle doit contenir $\{0\}$, $\{1\}$ et $\{2\} = \Compl{(\{0\}\cup\{1\})}$, donc toute réunion de singletons.
+\end{exemple}
+
+\begin{proposition}\label{prop:stabilite}
+Soit $\tA$ une tribu sur $X$.
+\begin{enumerate}[label=\roman*)]
+  \item $X \in \tA$.
+  \item Pour toute suite $(A_n)_{n\in\N} \in \tA^{\N}$, on a $\displaystyle\bigcap_{n\in\N} A_n \in \tA$.
+  \item Pour tous $A, B \in \tA$, on a $A \setminus B \in \tA$ et $A \,\triangle\, B \in \tA$.
+  \item Pour toute suite $(A_n)_{n\in\N} \in \tA^{\N}$, on a $\displaystyle\limsup_{n\to+\infty} A_n \in \tA$ et $\displaystyle\liminf_{n\to+\infty} A_n \in \tA$.
+  \item Si $(\tA_i)_{i\in I}$ est une famille quelconque de tribus sur $X$, alors $\displaystyle\bigcap_{i\in I}\tA_i$ est une tribu sur $X$.
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+\begin{enumerate}[label=\roman*)]
+  \item On a $\emptyset \in \tA$, donc $X = \Compl{\emptyset} \in \tA$.
+  \item Soit $(A_n)_{n} \in \tA^{\N}$. Pour tout $n \in \N$, on a $\Compl{A_n} \in \tA$, donc $\bigcup_{n\in\N} \Compl{A_n} \in \tA$. En passant au complémentaire,
+  \[
+    \Bigl(\bigcup_{n\in\N} \Compl{A_n}\Bigr)^{c} = \bigcap_{n\in\N} A_n \in \tA.
+  \]
+  \item Soient $A, B \in \tA$. Comme $\Compl{B} \in \tA$, on a $A \setminus B = A \cap \Compl{B} \in \tA$. De même, $B \setminus A \in \tA$. Enfin, $A \,\triangle\, B = (A \setminus B) \cup (B \setminus A) \in \tA$.
+  \item Soit $(A_n)_n \in \tA^{\N}$. On a
+  \[
+    \limsup_{n\to+\infty} A_n = \bigcap_{n\in\N}\bigcup_{k\geq n} A_k.
+  \]
+  Pour tout $n\in\N$, la réunion dénombrable $B_n = \bigcup_{k\geq n} A_k$ appartient à $\tA$. Donc $\limsup_n A_n = \bigcap_{n\in\N} B_n \in \tA$ d'après ii). De même, $\liminf_n A_n = \bigcup_{n\in\N}\bigcap_{k\geq n} A_k \in \tA$.
+  \item Posons $\tD = \bigcap_{i\in I}\tA_i$.
+  \begin{itemize}
+    \item Pour tout $i \in I$, on a $\emptyset \in \tA_i$, car $\tA_i$ est une tribu. Donc $\emptyset \in \tD$.
+    \item Soit $F \in \tD$. Pour tout $i \in I$, on a $F \in \tA_i$, donc $\Compl{F} \in \tA_i$. Ainsi $\Compl{F} \in \tD$.
+    \item Soit $(A_n)_n \in \tD^{\N}$. Fixons $i \in I$. Pour tout $n$, on a $A_n \in \tA_i$, et comme $\tA_i$ est une tribu, $\bigcup_{n} A_n \in \tA_i$. Ceci étant vrai pour tout $i$, on a $\bigcup_n A_n \in \tD$. \qedhere
+  \end{itemize}
+\end{enumerate}
+\end{proof}
+
+% ------------------------------------------------------------------
+\section{Tribu engendrée et tribu borélienne}
+
+\begin{proposition}\label{prop:engendree}
+Soit $\tE \subset \Parties(X)$. Il existe une tribu $\sigma(\tE)$ sur $X$ telle que :
+\begin{enumerate}[label=\roman*)]
+  \item $\tE \subset \sigma(\tE)$ ;
+  \item pour toute tribu $\tA$ sur $X$ telle que $\tE \subset \tA$, on a $\sigma(\tE) \subset \tA$.
+\end{enumerate}
+Autrement dit, $\sigma(\tE)$ est la plus petite tribu, au sens de l'inclusion, contenant $\tE$.
+\end{proposition}
+
+\begin{proof}
+Posons $\tF := \{\tA \subset \Parties(X) \;:\; \tA \text{ est une tribu sur } X \text{ et } \tE \subset \tA\}$. Comme $\Parties(X)$ est une tribu contenant $\tE$, on a $\Parties(X) \in \tF$, donc $\tF \neq \emptyset$. Posons
+\[
+  \sigma(\tE) := \bigcap_{\tA \in \tF} \tA.
+\]
+C'est une intersection de tribus, donc une tribu sur $X$ d'après la proposition~\ref{prop:stabilite}.
+
+Soit $B \in \tE$. Pour tout $\tA \in \tF$, on a $\tE \subset \tA$, donc $B \in \tA$. Ainsi $B \in \sigma(\tE)$, ce qui montre i).
+
+Soit $\tA_0$ une tribu sur $X$ telle que $\tE \subset \tA_0$. Alors $\tA_0 \in \tF$, donc $\sigma(\tE) \subset \tA_0$ par définition de l'intersection, ce qui montre ii).
+\end{proof}
+
+\begin{definition}
+On appelle $\sigma(\tE)$ la \emph{tribu engendrée} par $\tE$.
+\end{definition}
+
+\begin{exemple}
+Si $A \subset X$, alors $\sigma(\{A\}) = \{\emptyset, X, A, \Compl{A}\}$.
+\end{exemple}
+
+\begin{definition}
+Soit $(X,d)$ un espace métrique (ou topologique). On note $\Ouv(X)$ l'ensemble des ouverts de $X$. La \emph{tribu borélienne} de $X$ est la tribu engendrée par les ouverts :
+\[
+  \Bor(X) := \sigma(\Ouv(X)).
+\]
+Ses éléments sont appelés les \emph{boréliens} de $X$.
+\end{definition}
+
+\begin{remarque}
+Soit $(X,d)$ un espace métrique. Une partie $D \subset X$ est dense dans $X$ si et seulement si
+\[
+  \forall x \in X,\ \forall \varepsilon > 0,\ \exists d_0 \in D,\quad d(x,d_0) < \varepsilon.
+\]
+L'espace $X$ est dit \emph{séparable} s'il admet une partie dénombrable dense.
+\end{remarque}
+
+\begin{proposition}\label{prop:separable}
+Soit $(X,d)$ un espace métrique séparable et $D$ une partie dénombrable dense de $X$. Alors
+\[
+  \Bor(X) = \sigma\bigl(\{B(a,r) \;:\; a \in D,\ r \in \Q_+^*\}\bigr),
+  \qquad\text{où } B(a,r) = \{x \in X : d(x,a) < r\}.
+\]
+\end{proposition}
+
+\begin{proof}
+Notons $\tE$ la famille de boules de l'énoncé. Comme les boules ouvertes sont des ouverts, $\tE \subset \Bor(X)$, et comme $\Bor(X)$ est une tribu, $\sigma(\tE) \subset \Bor(X)$.
+
+Réciproquement, soit $O$ un ouvert de $X$ et $x \in O$. Il existe $r \in \Q_+^*$ tel que $B(x,2r) \subset O$, puis $a \in D$ tel que $d(x,a) < r$. Alors $x \in B(a,r)$, et l'inégalité triangulaire donne $B(a,r) \subset B(x,2r) \subset O$. Ainsi $O$ est la réunion des éléments de $\tE$ contenus dans $O$. Comme $\tE$ est dénombrable, cette réunion est dénombrable, donc $O \in \sigma(\tE)$. On a donc $\Ouv(X) \subset \sigma(\tE)$, puis $\Bor(X) = \sigma(\Ouv(X)) \subset \sigma(\tE)$.
+\end{proof}
+
+\subsection*{Le cas de \texorpdfstring{$X = \R$}{X = R}}
+
+\begin{proposition}\label{prop:generateurs}
+La tribu borélienne de $\R$ est engendrée par chacune des familles suivantes :
+\begin{gather*}
+  \{\,]a,b[ \;:\; a,b \in \R\},\qquad
+  \{\,]a,+\infty[ \;:\; a \in \R\},\qquad
+  \{\,[a,+\infty[ \;:\; a \in \R\},\\
+  \{\,]-\infty,a[ \;:\; a \in \R\},\qquad
+  \{\,]-\infty,a] \;:\; a \in \R\}.
+\end{gather*}
+\end{proposition}
+
+\begin{proof}
+Posons $\tE_1 = \{\,]a,b[ \;:\; a,b\in\R\}$. Tout intervalle ouvert est un ouvert, donc $\tE_1 \subset \Ouv(\R) \subset \Bor(\R)$, et comme $\Bor(\R)$ est une tribu, $\sigma(\tE_1) \subset \Bor(\R)$.
+
+Soit $O \in \Ouv(\R)$. D'après la preuve de la proposition~\ref{prop:separable} avec $D = \Q$, on dispose d'intervalles ouverts $(I_n)_{n\in\N}$ tels que $O = \bigcup_{n\in\N} I_n$. Pour tout $n$, on a $I_n \in \tE_1 \subset \sigma(\tE_1)$, et comme $\sigma(\tE_1)$ est une tribu, $O \in \sigma(\tE_1)$. Donc $\Ouv(\R) \subset \sigma(\tE_1)$, puis $\Bor(\R) \subset \sigma(\tE_1)$. Ainsi $\Bor(\R) = \sigma(\tE_1)$.
+
+Posons $\tE_2 = \{\,]a,+\infty[ \;:\; a\in\R\}$ et $\tE_3 = \{\,[a,+\infty[ \;:\; a\in\R\}$. Les égalités
+\[
+  ]a,+\infty[\; = \bigcup_{n\in\N}\, ]a,a+n[,
+  \qquad
+  ]a,+\infty[\; = \bigcup_{n\in\N} \Bigl[a+\tfrac{1}{n+1},+\infty\Bigr[,
+  \qquad
+  [a,+\infty[\; = \bigcap_{n\in\N} \Bigl]a-\tfrac{1}{n+1},+\infty\Bigr[
+\]
+donnent $\sigma(\tE_2) \subset \sigma(\tE_1)$ et $\sigma(\tE_2) = \sigma(\tE_3)$. Pour $a < b$, on a enfin $]a,b[\; = \;]a,+\infty[ \;\cap\; \Compl{[b,+\infty[}\; \in \sigma(\tE_2)$, et $]a,b[\; = \emptyset$ si $a \geq b$, d'où $\sigma(\tE_1) \subset \sigma(\tE_2)$. Les deux dernières familles s'obtiennent par passage au complémentaire, puisque $]-\infty,a[\; = \Compl{[a,+\infty[}$ et $]-\infty,a] = \Compl{]a,+\infty[}$.
+\end{proof}
+
+\begin{remarque}
+\leavevmode
+\begin{itemize}
+  \item $\Bor(\R)$ contient tous les fermés : si $F$ est un fermé, alors $\Compl{F} \in \Ouv(\R) \subset \Bor(\R)$, donc $F \in \Bor(\R)$ puisque $\Bor(\R)$ est une tribu.
+  \item En particulier, pour tout $x \in \R$, on a $\{x\} \in \Bor(\R)$.
+  \item On admet que $\Bor(\R) \neq \Parties(\R)$. Il est cependant très difficile d'exhiber explicitement une partie de $\R$ qui n'est pas borélienne.
+\end{itemize}
+\end{remarque}
+
+% ------------------------------------------------------------------
+\section{Applications mesurables}
+
+\begin{definition}
+Soient $(X,\tA)$ et $(Y,\tB)$ deux espaces mesurables et $f : X \to Y$ une application. On dit que $f$ est \emph{$(\tA,\tB)$-mesurable} si
+\[
+  \forall F \in \tB,\quad f^{-1}(F) \in \tA.
+\]
+On dit simplement « $f$ est mesurable » s'il n'y a pas d'ambiguïté sur les tribus. Si $Y$ est un espace topologique muni de sa tribu borélienne, on peut aussi dire « $f$ est borélienne ». On emploie surtout ce terme lorsque $X$ est lui aussi muni de sa tribu borélienne.
+\end{definition}
+
+\begin{exemple}
+Soit $(X,\tA)$ un espace mesurable, $A \subset X$ et $f = \ind_A$, vue comme une application de $X$ dans $(\R,\Bor(\R))$. Pour tout $F \in \Bor(\R)$,
+\[
+  f^{-1}(F) =
+  \begin{cases}
+    A & \text{si } 1 \in F \text{ et } 0 \notin F,\\
+    \Compl{A} & \text{si } 1 \notin F \text{ et } 0 \in F,\\
+    X & \text{si } 1 \in F \text{ et } 0 \in F,\\
+    \emptyset & \text{si } 1 \notin F \text{ et } 0 \notin F.
+  \end{cases}
+\]
+Ainsi, $\ind_A$ est mesurable si et seulement si $A \in \tA$.
+\end{exemple}
+
+\textbf{Notation.} Pour $\tE \subset \Parties(Y)$, on note $f^{-1}(\tE) := \{f^{-1}(E) \;:\; E \in \tE\}$. On rappelle que l'image réciproque commute aux opérations ensemblistes :
+\[
+  f^{-1}(\Compl{E}) = \bigl(f^{-1}(E)\bigr)^{c},
+  \qquad
+  f^{-1}\Bigl(\bigcup_{n\in\N} E_n\Bigr) = \bigcup_{n\in\N} f^{-1}(E_n).
+\]
+
+\begin{proposition}[Critère de mesurabilité]\label{prop:critere}
+Soient $(X,\tA)$ un espace mesurable, $\tE \subset \Parties(Y)$ et $f : X \to Y$ une application. Alors $f$ est $(\tA,\sigma(\tE))$-mesurable si et seulement si $f^{-1}(\tE) \subset \tA$, c'est-à-dire
+\[
+  \forall E \in \tE,\quad f^{-1}(E) \in \tA.
+\]
+\end{proposition}
+
+Le point important est qu'il suffit de tester la mesurabilité sur une famille génératrice. La preuve repose sur les trois lemmes suivants.
+
+\begin{lemme}\label{lem:reciproque}
+Soit $f : X \to Y$ une application et $\tB$ une tribu sur $Y$. Alors $f^{-1}(\tB)$ est une tribu sur $X$.
+\end{lemme}
+
+\begin{proof}
+On a $\emptyset = f^{-1}(\emptyset) \in f^{-1}(\tB)$. Soit $A \in f^{-1}(\tB)$ : il existe $E \in \tB$ tel que $A = f^{-1}(E)$, donc $\Compl{A} = f^{-1}(\Compl{E})$ avec $\Compl{E} \in \tB$. Ainsi $\Compl{A} \in f^{-1}(\tB)$. Enfin, soit $(A_n)_n \in f^{-1}(\tB)^{\N}$ : pour tout $n$, il existe $B_n \in \tB$ tel que $A_n = f^{-1}(B_n)$. Alors
+\[
+  \bigcup_{n\in\N} A_n = f^{-1}\Bigl(\bigcup_{n\in\N} B_n\Bigr) \in f^{-1}(\tB),
+\]
+car $\bigcup_n B_n \in \tB$.
+\end{proof}
+
+\begin{exemple}[Tribu trace]
+Soit $X \subset Y$, $\tB$ une tribu sur $Y$ et $i : X \to Y$, $x \mapsto x$ l'injection canonique. Alors
+\[
+  i^{-1}(\tB) = \{X \cap E \;:\; E \in \tB\}.
+\]
+Cette tribu sur $X$ est appelée la \emph{tribu trace} de $\tB$ sur $X$.
+\end{exemple}
+
+\begin{lemme}\label{lem:transfert}
+Soit $f : X \to Y$ une application et $\tA$ une tribu sur $X$. Alors
+\[
+  \tB := \{F \in \Parties(Y) \;:\; f^{-1}(F) \in \tA\}
+\]
+est une tribu sur $Y$.
+\end{lemme}
+
+\begin{proof}
+On a $f^{-1}(\emptyset) = \emptyset \in \tA$, donc $\emptyset \in \tB$. Si $B \in \tB$, alors $f^{-1}(\Compl{B}) = \bigl(f^{-1}(B)\bigr)^{c} \in \tA$, donc $\Compl{B} \in \tB$. Si $(B_n)_n \in \tB^{\N}$, alors $f^{-1}\bigl(\bigcup_n B_n\bigr) = \bigcup_n f^{-1}(B_n) \in \tA$, donc $\bigcup_n B_n \in \tB$.
+\end{proof}
+
+\begin{lemme}\label{lem:commute}
+Soit $f : X \to Y$ une application et $\tE \subset \Parties(Y)$. Alors
+\[
+  f^{-1}(\sigma(\tE)) = \sigma(f^{-1}(\tE)).
+\]
+\end{lemme}
+
+\begin{proof}
+\emph{Inclusion $\supset$.} D'après le lemme~\ref{lem:reciproque}, $f^{-1}(\sigma(\tE))$ est une tribu sur $X$. Comme $\tE \subset \sigma(\tE)$, elle contient $f^{-1}(\tE)$. Par minimalité de la tribu engendrée, $\sigma(f^{-1}(\tE)) \subset f^{-1}(\sigma(\tE))$.
+
+\emph{Inclusion $\subset$.} Posons $\tD := \{F \in \Parties(Y) \;:\; f^{-1}(F) \in \sigma(f^{-1}(\tE))\}$. D'après le lemme~\ref{lem:transfert}, $\tD$ est une tribu sur $Y$. Pour tout $E \in \tE$, on a $f^{-1}(E) \in f^{-1}(\tE) \subset \sigma(f^{-1}(\tE))$, donc $E \in \tD$. Ainsi $\tE \subset \tD$, puis $\sigma(\tE) \subset \tD$.
+
+Soit $B \in f^{-1}(\sigma(\tE))$ : il existe $C \in \sigma(\tE)$ tel que $B = f^{-1}(C)$. Comme $C \in \tD$, on a $B = f^{-1}(C) \in \sigma(f^{-1}(\tE))$.
+\end{proof}
+
+\begin{proof}[Preuve de la proposition~\ref{prop:critere}]
+\emph{Sens direct.} Supposons $f$ mesurable. Si $E \in \tE$, alors $E \in \sigma(\tE)$, donc $f^{-1}(E) \in \tA$.
+
+\emph{Réciproque.} Supposons $f^{-1}(\tE) \subset \tA$. Comme $\tA$ est une tribu, $\sigma(f^{-1}(\tE)) \subset \tA$. Soit $F \in \sigma(\tE)$. D'après le lemme~\ref{lem:commute},
+\[
+  f^{-1}(F) \in f^{-1}(\sigma(\tE)) = \sigma(f^{-1}(\tE)) \subset \tA.
+\]
+Donc $f$ est mesurable.
+\end{proof}
+
+\begin{remarque}[Autre preuve de la réciproque]
+Posons $\tF := \{B \in \Parties(Y) \;:\; f^{-1}(B) \in \tA\}$. C'est une tribu sur $Y$ d'après le lemme~\ref{lem:transfert}, et elle contient $\tE$ par hypothèse. Donc $\sigma(\tE) \subset \tF$, c'est-à-dire que $f^{-1}(B) \in \tA$ pour tout $B \in \sigma(\tE)$. Cette preuve n'utilise pas le lemme~\ref{lem:commute}.
+\end{remarque}
+
+\subsection*{Applications du critère}
+
+\begin{proposition}
+Soit $f : (X,\tA) \to (\R,\Bor(\R))$. Alors $f$ est mesurable si et seulement si, pour tout $a \in \R$,
+\[
+  f^{-1}(\,]a,+\infty[\,) = \{x \in X : f(x) > a\} \in \tA.
+\]
+\end{proposition}
+
+\begin{proof}
+On applique la proposition~\ref{prop:critere} avec $\tE = \{\,]a,+\infty[ \;:\; a\in\R\}$, puisque $\Bor(\R) = \sigma(\tE)$ d'après la proposition~\ref{prop:generateurs}.
+\end{proof}
+
+\begin{proposition}
+Soient $X$ et $Y$ deux espaces topologiques, munis de leurs tribus boréliennes. Toute application continue $f : X \to Y$ est $(\Bor(X),\Bor(Y))$-mesurable.
+\end{proposition}
+
+\begin{proof}
+On a $\Bor(Y) = \sigma(\Ouv(Y))$. Si $O \in \Ouv(Y)$, alors $f^{-1}(O)$ est un ouvert de $X$ par continuité, donc $f^{-1}(O) \in \Bor(X)$. On conclut avec la proposition~\ref{prop:critere}.
+\end{proof}
+
+
+% ------------------------------------------------------------------
+\section{Opérations sur les fonctions mesurables}
+
+\begin{proposition}
+Soient $f : (X,\tA) \to (Y,\tB)$ et $g : (Y,\tB) \to (Z,\tF)$ deux applications mesurables. Alors $g \circ f : (X,\tA) \to (Z,\tF)$ est mesurable.
+\end{proposition}
+
+\begin{proof}
+Soit $E \in \tF$. On a $(g\circ f)^{-1}(E) = f^{-1}(g^{-1}(E))$. Comme $g$ est mesurable, $g^{-1}(E) \in \tB$, et comme $f$ est mesurable, $f^{-1}(g^{-1}(E)) \in \tA$.
+\end{proof}
+
+\begin{exemple}
+Soient $a \in \R$ et $f : (X,\tA) \to (\R,\Bor(\R))$ mesurable. Alors $\max(f,a)$, $\min(f,a)$ et $|f|$ sont mesurables : ce sont les composées de $f$ avec $x \mapsto \max(x,a)$, $x \mapsto \min(x,a)$ et $x \mapsto |x|$, qui sont continues, donc boréliennes.
+\end{exemple}
+
+\begin{proposition}\label{prop:composantes}
+Soit $f = (f_1,f_2) : (X,\tA) \to (\R^2,\Bor(\R^2))$. Alors $f$ est mesurable si et seulement si $f_1$ et $f_2$ sont $(\tA,\Bor(\R))$-mesurables.
+\end{proposition}
+
+\begin{proof}
+\emph{Sens direct.} Les projections $\pi_1$ et $\pi_2$ sont continues, donc boréliennes. Par composition, $f_1 = \pi_1\circ f$ et $f_2 = \pi_2 \circ f$ sont mesurables.
+
+\emph{Réciproque.} Tout ouvert de $\R^2$ est une réunion dénombrable de produits $U \times V$ d'ouverts de $\R$, par exemple de rectangles à extrémités rationnelles. On a donc $\Bor(\R^2) = \sigma(\tE)$, où $\tE = \{U \times V : U,V \in \Ouv(\R)\}$. Or
+\[
+  f^{-1}(U\times V) = f_1^{-1}(U) \cap f_2^{-1}(V) \in \tA,
+\]
+car $f_1$ et $f_2$ sont mesurables et car $U,V \in \Bor(\R)$. On conclut avec la proposition~\ref{prop:critere}.
+\end{proof}
+
+\begin{remarque}
+En identifiant $\C$ à $\R^2$, une fonction $f : (X,\tA) \to (\C,\Bor(\C))$ est mesurable si et seulement si $\mathrm{Re}(f)$ et $\mathrm{Im}(f)$ sont mesurables.
+\end{remarque}
+
+\begin{proposition}
+Si $f,g : (X,\tA) \to (\R,\Bor(\R))$ sont mesurables, alors $f+g$ et $fg$ sont mesurables.
+\end{proposition}
+
+\begin{proof}
+D'après la proposition~\ref{prop:composantes}, $h = (f,g)$ est mesurable. Les fonctions $(a,b) \mapsto a+b$ et $(a,b)\mapsto ab$ sont continues, donc boréliennes. On conclut par composition avec $h$.
+\end{proof}
+
+\begin{exemple}
+La fonction $f : x \mapsto e^{-x}\,\ind_{]1,+\infty[}(x) + \cos(x)\,\ind_{]-\infty,1]}(x)$ est borélienne. En effet, $x\mapsto e^{-x}$ et $\cos$ sont continues, et les deux indicatrices sont boréliennes, car $]1,+\infty[$ et $]-\infty,1]$ sont des boréliens.
+\end{exemple}
+
+Pour la suite, on note $\Rb = \R \cup \{-\infty,+\infty\}$ et on le munit de la tribu $\Bor(\Rb) = \sigma(\{[a,+\infty] : a \in \R\})$. Cette tribu contient aussi les $]a,+\infty]$, puisque $]a,+\infty] = \bigcup_{k\geq 1} [a+\frac1k,+\infty]$.
+
+\begin{proposition}\label{prop:limites}
+Soit $(f_n)_{n\in\N}$ une suite de fonctions mesurables de $(X,\tA)$ dans $(\Rb,\Bor(\Rb))$.
+\begin{enumerate}[label=\roman*)]
+  \item $\sup_n f_n$ et $\inf_n f_n$ sont mesurables.
+  \item $\limsup_n f_n$ et $\liminf_n f_n$ sont mesurables.
+  \item Si $(f_n)_n$ converge simplement vers $f$, alors $f$ est mesurable.
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+\begin{enumerate}[label=\roman*)]
+  \item Pour tout $a \in \R$,
+  \begin{gather*}
+    \Bigl(\inf_n f_n\Bigr)^{-1}([a,+\infty]) = \bigcap_{n\in\N} f_n^{-1}([a,+\infty]) \in \tA,\\
+    \Bigl(\sup_n f_n\Bigr)^{-1}(\,]a,+\infty]) = \bigcup_{n\in\N} f_n^{-1}(\,]a,+\infty]) \in \tA.
+  \end{gather*}
+  Pour la seconde, on utilise que les $]a,+\infty]$ engendrent aussi $\Bor(\Rb)$, puisque $[a,+\infty] = \bigcap_{k\geq 1}\,]a-\frac1k,+\infty]$. On conclut avec la proposition~\ref{prop:critere}.
+  \item Posons $g_n = \inf_{k\geq n} f_k$, qui est mesurable d'après i). La suite $(g_n)_n$ est croissante, donc $\liminf_n f_n = \sup_n g_n$ est mesurable d'après i). De même pour $\limsup_n f_n = \inf_n \sup_{k\geq n} f_k$.
+  \item Dans ce cas, $f = \limsup_n f_n$, et on applique ii). \qedhere
+\end{enumerate}
+\end{proof}
+
+\begin{exemple}
+Si $f : \R \to \R$ est dérivable, alors $f'$ est borélienne. En effet, $f'$ est la limite simple des fonctions $h_n : x \mapsto n\bigl(f(x+\frac1n)-f(x)\bigr)$, qui sont continues, donc boréliennes.
+\end{exemple}
+
+% ------------------------------------------------------------------
+\section{Fonctions étagées}
+
+Soit $(X,\tA)$ un espace mesurable.
+
+\begin{definition}
+Une fonction $f : X \to \R$ est dite \emph{étagée} si elle est $(\tA,\Bor(\R))$-mesurable et si elle prend un nombre fini de valeurs, c'est-à-dire si $\mathrm{Card}(f(X)) < +\infty$. De façon équivalente :
+\[
+  \exists n \in \N^*,\ \exists (\alpha_i)_{i\in\llbracket 1,n\rrbracket} \in \R^n,\quad \forall x \in X,\ \exists i \in \llbracket 1,n\rrbracket,\quad f(x) = \alpha_i,
+\]
+ou encore : il existe $n \in \N^*$ tel que $f(X) = \{\alpha_1,\dots,\alpha_n\}$, avec $\alpha_i \neq \alpha_j$ pour $i \neq j$.
+\end{definition}
+
+Une fonction $f$ est donc étagée si et seulement si elle s'écrit
+\[
+  f = \sum_{i\in I}\alpha_i\,\ind_{A_i},
+  \qquad\text{avec } I = \llbracket 1,n\rrbracket \text{ fini},
+\]
+où :
+\begin{itemize}
+  \item $\displaystyle\bigcup_{i=1}^{n} A_i = X$ et $A_i \cap A_j = \emptyset$ pour tous $i \neq j$ ;
+  \item $A_i \in \tA$ et $\alpha_i \in \R$ pour tout $i \in I$.
+\end{itemize}
+Si les $\alpha_i$ sont deux à deux distincts et les $A_i$ non vides, cette écriture est unique à l'ordre près, et $A_i = f^{-1}(\{\alpha_i\})$. On appelle \emph{forme canonique} de $f$ l'écriture
+\[
+  f = \sum_{\alpha \in f(X)} \alpha\,\ind_{f^{-1}(\{\alpha\})}.
+\]
+
+\begin{proposition}\label{prop:etagees}
+L'ensemble des fonctions étagées est stable par combinaison linéaire, par produit, et par maximum et minimum finis.
+\end{proposition}
+
+\begin{proof}
+Soient $f = \sum_{i\in I} \alpha_i\,\ind_{A_i}$ et $g = \sum_{j\in J}\beta_j\,\ind_{B_j}$ deux fonctions étagées, où $(A_i)_i$ et $(B_j)_j$ sont des partitions finies et mesurables de $X$. Alors $(A_i\cap B_j)_{(i,j)\in I\times J}$ est aussi une partition finie et mesurable de $X$. Pour $\lambda \in \R$, on a
+\[
+  \lambda f + g = \sum_{i,j} (\lambda\alpha_i+\beta_j)\,\ind_{A_i\cap B_j},
+  \qquad
+  fg = \sum_{i,j} \alpha_i\beta_j\,\ind_{A_i\cap B_j},
+\]
+\[
+  \max(f,g) = \sum_{i,j} \max(\alpha_i,\beta_j)\,\ind_{A_i\cap B_j},
+  \qquad
+  \min(f,g) = \sum_{i,j} \min(\alpha_i,\beta_j)\,\ind_{A_i\cap B_j}.
+\]
+Ces fonctions sont donc étagées.
+\end{proof}
+
+\begin{exemple}
+Si $A \in \tA$, alors $\ind_A = 1\cdot\ind_A + 0\cdot\ind_{\Compl{A}}$ est étagée. Par combinaison linéaire, toute fonction $\sum_{i\in I}\alpha_i\,\ind_{A_i}$, avec $I$ fini et $A_i \in \tA$, est donc étagée, même si les $A_i$ ne sont pas disjoints.
+\end{exemple}
+
+\begin{theoreme}[Lemme fondamental d'approximation]\label{thm:approximation}
+Soit $f : (X,\tA) \to \R$ (ou $\Rb$, ou $\C$) une fonction mesurable. Il existe une suite $(f_n)_{n}$ de fonctions étagées telle que, pour tout $x \in X$, $\lim_{n\to+\infty}f_n(x) = f(x)$. De plus :
+\begin{enumerate}[label=\roman*)]
+  \item si $f \geq 0$, on peut choisir $(f_n)_n$ positive et croissante ;
+  \item si $f$ est bornée, on peut choisir $(f_n)_n$ convergeant uniformément vers $f$.
+\end{enumerate}
+\end{theoreme}
+
+\begin{proof}
+\emph{Cas $f \geq 0$, à valeurs dans $[0,+\infty]$.} Pour $n \in \N$, on découpe $[0,n[$ en tranches de hauteur $2^{-n}$ et on pose
+\[
+  E_{n,k} = f^{-1}\Bigl(\Bigl[\frac{k}{2^n},\frac{k+1}{2^n}\Bigr[\Bigr) \quad (0 \leq k \leq n2^n-1),
+  \qquad
+  E_{n,\infty} = f^{-1}([n,+\infty]),
+\]
+\[
+  f_n = \sum_{k=0}^{n2^n-1} \frac{k}{2^n}\,\ind_{E_{n,k}} + n\,\ind_{E_{n,\infty}} = \min\Bigl(n,\frac{\lfloor 2^n f\rfloor}{2^n}\Bigr),
+\]
+avec $f_n(x) = n$ lorsque $f(x) = +\infty$.
+\begin{center}
+\begin{tikzpicture}[scale=1.25]
+\draw[black!15] (0,0.25) -- (3.8,0.25);\draw[black!15] (0,0.5) -- (3.8,0.5);\draw[black!15] (0,0.75) -- (3.8,0.75);\draw[black!15] (0,1.0) -- (3.8,1.0);\draw[black!15] (0,1.25) -- (3.8,1.25);\draw[black!15] (0,1.5) -- (3.8,1.5);\draw[black!15] (0,1.75) -- (3.8,1.75);\draw[black!15] (0,2.0) -- (3.8,2.0);
+\draw[->] (-0.2,0) -- (4,0);\draw[->] (0,-0.2) -- (0,2.6);
+\draw[black!60,thick] (0.000,0.150) -- (0.060,0.226) -- (0.120,0.300) -- (0.180,0.373) -- (0.240,0.443) -- (0.300,0.510) -- (0.360,0.574) -- (0.420,0.634) -- (0.480,0.690) -- (0.540,0.742) -- (0.600,0.788) -- (0.660,0.830) -- (0.720,0.867) -- (0.780,0.898) -- (0.840,0.925) -- (0.900,0.946) -- (0.960,0.963) -- (1.020,0.976) -- (1.080,0.984) -- (1.140,0.989) -- (1.200,0.990) -- (1.260,0.989) -- (1.320,0.985) -- (1.380,0.980) -- (1.440,0.973) -- (1.500,0.966) -- (1.560,0.958) -- (1.620,0.951) -- (1.680,0.946) -- (1.740,0.942) -- (1.800,0.939) -- (1.860,0.940) -- (1.920,0.943) -- (1.980,0.949) -- (2.040,0.959) -- (2.100,0.972) -- (2.160,0.989) -- (2.220,1.009) -- (2.280,1.033) -- (2.340,1.061) -- (2.400,1.091) -- (2.460,1.125) -- (2.520,1.161) -- (2.580,1.199) -- (2.640,1.239) -- (2.700,1.281) -- (2.760,1.323) -- (2.820,1.365) -- (2.880,1.407) -- (2.940,1.448) -- (3.000,1.488) -- (3.060,1.525) -- (3.120,1.560) -- (3.180,1.592) -- (3.240,1.620) -- (3.300,1.644) -- (3.360,1.664) -- (3.420,1.679) -- (3.480,1.690) -- (3.540,1.695) -- (3.600,1.695);
+\draw[line width=1.5pt] (0.000,0.0) -- (0.081,0.0);
+\draw[line width=1.5pt] (0.081,0.25) -- (0.292,0.25);
+\draw[line width=1.5pt] (0.292,0.5) -- (0.553,0.5);
+\draw[line width=1.5pt] (0.553,0.75) -- (2.196,0.75);
+\draw[line width=1.5pt] (2.196,1.0) -- (2.659,1.0);
+\draw[line width=1.5pt] (2.659,1.25) -- (3.019,1.25);
+\draw[line width=1.5pt] (3.019,1.5) -- (3.600,1.5);
+\node[left] at (0,2) {\small $2$};\node[left] at (0,0.25) {\small $\frac14$};
+\node[black!70,above] at (2.2,2.15) {\small $f$};
+\node[below] at (1.9,-0.1) {\small en gras : $f_2$, de pas $2^{-2}$ et plafonnée à $2$};
+\end{tikzpicture}
+\end{center}
+
+Ces ensembles sont dans $\tA$ car $f$ est mesurable, donc $f_n$ est étagée, et $f_n \geq 0$.
+
+\emph{Convergence simple.} Soit $x \in X$. Si $f(x) < +\infty$, alors pour tout $n \geq f(x)$, on a $x\notin E_{n,\infty}$ ou $f(x) = n$, donc $0 \leq f(x)-f_n(x) < 2^{-n}$. Ainsi, $f_n(x) \to f(x)$. Si $f(x) = +\infty$, alors $f_n(x) = n \to +\infty = f(x)$.
+
+\emph{Croissance.} Soit $x$ tel que $f(x)<+\infty$ et $k = \lfloor 2^n f(x)\rfloor$. Alors $2k \leq 2^{n+1}f(x)$, et comme $2k$ est entier, $2k \leq \lfloor 2^{n+1}f(x)\rfloor$. En divisant par $2^{n+1}$, on obtient
+\[
+  \frac{\lfloor 2^{n}f(x)\rfloor}{2^{n}} \leq \frac{\lfloor 2^{n+1}f(x)\rfloor}{2^{n+1}}.
+\]
+Comme de plus $n \leq n+1$, on a $f_n(x) \leq f_{n+1}(x)$. Le cas $f(x) = +\infty$ est immédiat.
+
+\emph{Cas $0 \leq f \leq M$.} Pour tout $n \geq M$ et tout $x\in X$, l'inégalité précédente donne $0 \leq f(x)-f_n(x) < 2^{-n}$, donc $\sup_X |f-f_n| \leq 2^{-n} \to 0$.
+
+\emph{Cas d'une fonction de signe quelconque.} On écrit $f = f^+ - f^-$, avec $f^+ = \max(f,0)$ et $f^- = \max(-f,0)$, qui sont mesurables et positives. On leur applique ce qui précède, et on obtient des suites $(f_n^+)_n$ et $(f_n^-)_n$. La fonction $f_n = f_n^+-f_n^-$ est étagée. Pour tout $x$, l'une des deux valeurs $f^+(x)$ et $f^-(x)$ est nulle, donc la suite correspondante est nulle en $x$ et la limite $\lim_nf_n(x) = f^+(x)-f^-(x) = f(x)$ a bien un sens. Si $f$ est bornée, $f^+$ et $f^-$ le sont aussi, et la convergence est uniforme.
+
+\emph{Cas complexe.} On applique le résultat à $\mathrm{Re}(f)$ et à $\mathrm{Im}(f)$.
+\end{proof}
+
+\begin{remarque}[Pourquoi un pas dyadique ?]
+Avec un pas $\frac1n$, c'est-à-dire avec $\frac1n\lfloor nf\rfloor$, la convergence simple reste vraie, mais la suite n'est plus forcément croissante. Si $f = 0{,}7$, alors $\frac13\lfloor 3f\rfloor = \frac23$, tandis que $\frac14\lfloor 4f\rfloor = \frac12$. Avec le pas $2^{-n}$, chaque découpage raffine le précédent, ce qui assure la croissance.
+\end{remarque}
+
+\vspace{1em}
+\textbf{Référence.} M. Briane et G. Pagès, \emph{Théorie de l'intégration}.
+
+\end{document}

@@ -1,0 +1,41 @@
+---
+import Base from '../../layouts/Base.astro';
+import { lireNiveaux, type Niveau } from '../../lib/contenu';
+
+export function getStaticPaths() {
+  return lireNiveaux().map((n) => ({ params: { niveau: n.slug }, props: { n } }));
+}
+const { n } = Astro.props as { n: Niveau };
+---
+<Base titre={n.nom} niveauActif={n.slug}>
+  <h1 class="titre-niveau">{n.nom}</h1>
+  {n.matieres.length === 0 && <p class="vide">Les premiers chapitres arrivent bientôt.</p>}
+  {n.matieres.map((m) => (
+    <section class="matiere" id={m.slug}>
+      <div class="ligne-titre">
+        <h2>{m.titre}</h2>
+        <div class="colonnes colonnes-titres" aria-hidden="true">
+          <span>Cours</span><span>Exercices</span><span>Vidéos</span>
+        </div>
+      </div>
+      <ol class="tableau">
+        {m.chapitres.map((c) => (
+          <li>
+            <a class="chapitre" href={c.url}><span class="numero">{c.numero}</span>{c.titre}</a>
+            <span class="colonnes">
+              {c.cours
+                ? <a class="case" href={c.cours} aria-label={`Cours du chapitre ${c.titre}, PDF`}>PDF</a>
+                : <span class="case" title="Pas encore disponible">–</span>}
+              {c.exercices
+                ? <a class="case" href={c.exercices} aria-label={`Exercices du chapitre ${c.titre}, PDF`}>PDF</a>
+                : <span class="case" title="Pas encore disponible">–</span>}
+              {c.videos.length > 0
+                ? <a class="case" href={`${c.url}#videos`} aria-label={`Vidéos du chapitre ${c.titre}`}>Voir</a>
+                : <span class="case" title="Pas encore disponible">–</span>}
+            </span>
+          </li>
+        ))}
+      </ol>
+    </section>
+  ))}
+</Base>

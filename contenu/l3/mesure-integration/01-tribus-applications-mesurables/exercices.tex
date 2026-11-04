@@ -1,0 +1,285 @@
+\documentclass[11pt]{article}
+\input{../../../commun}
+
+\newcounter{exo}
+\newcommand{\exo}[1]{%
+  \par\addvspace{0.9em}\refstepcounter{exo}%
+  \hypertarget{exo-\theexo}{}%
+  {\sffamily\bfseries Exercice \theexo\ --- #1}\ {\small\hyperlink{ind-\theexo}{[indication]}}\par\nopagebreak
+}
+\newcommand{\indic}[1]{%
+  \par\addvspace{0.5em}%
+  \hypertarget{ind-#1}{}%
+  {\sffamily\bfseries\hyperlink{exo-#1}{Exercice #1.}}\ %
+}
+\newcommand{\fond}{{\normalfont\small\ --- fondamental}}
+\newenvironment{questions}{\begin{enumerate}[label=\arabic*.]}{\end{enumerate}}
+
+\begin{document}
+\titredoc{L3 · Mesure et intégration}{Tribus et applications mesurables}{Exercices et indications}
+
+Les indications sont regroupées à la fin du document. Cherchez d'abord seul : une indication sert à débloquer une idée, pas à éviter de la chercher. Les exercices marqués « fondamental » sont à savoir faire en priorité, et ceux marqués $\star$ sont plus difficiles.
+
+% ------------------------------------------------------------------
+\section{Premières tribus}
+
+\exo{Reconnaître une tribu}
+Soit $X = \{1,2,3,4,5\}$. Les familles suivantes sont-elles des tribus sur $X$ ?
+\begin{questions}
+  \item $\{\emptyset, \{1,2\}, \{3,4,5\}, X\}$.
+  \item $\{\emptyset, \{1\}, \{2\}, \{1,2\}, X\}$.
+  \item $\{\emptyset, \{1\}, \{2,3,4,5\}, \{2\}, \{1,3,4,5\}, X\}$.
+\end{questions}
+
+\exo{Une réunion de tribus}
+Soit $X = \{1,2,3\}$, $\tA = \sigma(\{\{1\}\})$ et $\tB = \sigma(\{\{2\}\})$. Écrire $\tA$ et $\tB$, puis montrer que $\tA \cup \tB$ n'est pas une tribu.
+
+\exo{Les parties qui ne coupent pas $C$}
+Soit $C \subset X$. Montrer que $\tA = \{A \subset X \;:\; C \subset A \text{ ou } A \cap C = \emptyset\}$ est une tribu sur $X$.
+
+\exo{Tribu trace}
+Soit $\tA$ une tribu sur $X$ et $Y \subset X$.
+\begin{questions}
+  \item Montrer sans utiliser le cours que $\tA_Y = \{A \cap Y \;:\; A \in \tA\}$ est une tribu sur $Y$.
+  \item On suppose $Y \in \tA$. Montrer que $\tA_Y = \{A \in \tA \;:\; A \subset Y\}$.
+\end{questions}
+
+\exo{Tribu dénombrable -- codénombrable\fond}
+Soit $X$ un ensemble. On note $\tC$ l'ensemble des parties $A \subset X$ telles que $A$ ou $\Compl{A}$ soit au plus dénombrable.
+\begin{questions}
+  \item Montrer que $\tC$ est une tribu sur $X$.
+  \item Montrer que $\tC$ est la tribu engendrée par les singletons de $X$.
+  \item Que vaut $\tC$ lorsque $X$ est au plus dénombrable ?
+  \item On prend $X = \R$. Comparer $\tC$ et $\Bor(\R)$.
+\end{questions}
+
+% ------------------------------------------------------------------
+\section{Tribus engendrées}
+
+\exo{Calculs sur un ensemble fini}
+Soit $X = \{a,b,c,d,e\}$. Déterminer :
+\begin{questions}
+  \item la tribu engendrée par $\{\{a\},\{b,c\}\}$ ;
+  \item la tribu engendrée par $\{\{a,b\},\{b,c\}\}$.
+\end{questions}
+
+\exo{Règles de calcul}
+Soient $\tE, \tF \subset \Parties(X)$.
+\begin{questions}
+  \item Montrer que si $\tE \subset \tF$, alors $\sigma(\tE) \subset \sigma(\tF)$.
+  \item Montrer que $\sigma(\sigma(\tE)) = \sigma(\tE)$.
+  \item Montrer que si $\tE \subset \sigma(\tF)$ et $\tF \subset \sigma(\tE)$, alors $\sigma(\tE) = \sigma(\tF)$.
+  \item Montrer que $\sigma(\tE) = \sigma(\{\Compl{E} \;:\; E \in \tE\})$.
+\end{questions}
+
+\exo{Une tribu sur $\Z$}
+On considère sur $\Z$ la tribu $\tA$ engendrée par les ensembles $S_n = \{n,n+1\}$, $n \in \Z$. Déterminer $\tA$.
+
+\exo{Tribu engendrée par une partition finie\fond}
+Soit $(A_1,\dots,A_n)$ une partition de $X$ en parties non vides, et
+\[
+  \tA = \Bigl\{\bigcup_{i\in J} A_i \;:\; J \subset \{1,\dots,n\}\Bigr\}.
+\]
+\begin{questions}
+  \item Montrer que $\tA = \sigma(\{A_1,\dots,A_n\})$.
+  \item Montrer que $\tA$ possède exactement $2^n$ éléments.
+\end{questions}
+
+\exo{Partitions dénombrables}
+Soit $(A_k)_{k\in\N}$ une partition de $X$ en parties non vides.
+\begin{questions}
+  \item Décrire $\sigma(\{A_k \;:\; k\in\N\})$.
+  \item Construire une partition de $\N$ en une infinité de parties, toutes infinies.
+  \item En déduire une tribu infinie sur $\N$ dont tous les éléments non vides sont infinis.
+\end{questions}
+
+\exo{Une tribu infinie n'est jamais dénombrable $\star$}
+Soit $\tA$ une tribu infinie sur $X$. On veut montrer que $\tA$ n'est pas dénombrable. On suppose par l'absurde que $\tA$ est dénombrable. Pour $x \in X$, on pose
+\[
+  C(x) = \bigcap_{\substack{A \in \tA \\ x \in A}} A.
+\]
+\begin{questions}
+  \item Montrer que $C(x) \in \tA$ pour tout $x \in X$.
+  \item Montrer que deux ensembles $C(x)$ et $C(y)$ sont égaux ou disjoints.
+  \item Montrer que tout élément de $\tA$ est une réunion d'ensembles de la forme $C(x)$.
+  \item Montrer que la famille des $C(x)$ est infinie, puis conclure.
+\end{questions}
+
+% ------------------------------------------------------------------
+\section{Boréliens}
+
+\exo{Autres familles génératrices de $\Bor(\R)$\fond}
+Montrer que $\Bor(\R)$ est engendrée par chacune des familles suivantes :
+\begin{questions}
+  \item les intervalles $]a,b]$ avec $a<b$ ;
+  \item les intervalles $]q,+\infty[$ avec $q \in \Q$ ;
+  \item les fermés de $\R$.
+\end{questions}
+
+\exo{Reconnaître des boréliens\fond}
+\begin{questions}
+  \item Montrer que $\{x\in\R : \exists n \in \N^*,\ |x - 1/n| < 1/n^2\}$ est un borélien de $\R$.
+  \item Soit $g : \R \to \R$ continue. Montrer que son graphe est un borélien de $\R^2$.
+  \item Montrer que $\{(x,y) \in \R^2 : x + y = 1 \text{ et } x \notin \Q\}$ est un borélien de $\R^2$.
+  \item Soit $(f_n)_{n\in\N}$ une suite de fonctions continues de $\R^d$ dans $\R$. Montrer que l'ensemble des $x \in \R^d$ tels que la suite $(f_n(x))_n$ converge est un borélien de $\R^d$.
+\end{questions}
+
+\exo{Tribu borélienne de $\R^2$}
+Soit $\mathcal{R}$ l'ensemble des rectangles $]a,b[\,\times\,]c,d[$ avec $a,b,c,d\in\Q$.
+\begin{questions}
+  \item Montrer que $\mathcal{R}$ est dénombrable.
+  \item Montrer que tout ouvert $U$ de $\R^2$ vérifie $U = \bigcup_{R\in\mathcal{R},\, R\subset U} R$.
+  \item En déduire que $\Bor(\R^2) = \sigma(\mathcal{R})$.
+\end{questions}
+
+\exo{Produits de boréliens $\star$}
+Soit $\mathcal{T} = \sigma(\{A \times B : A,B \in \Bor(\R)\})$. On veut montrer que $\mathcal{T} = \Bor(\R^2)$.
+\begin{questions}
+  \item Montrer que $\Bor(\R^2) \subset \mathcal{T}$.
+  \item Soit $A$ un ouvert de $\R$. Montrer que $\{B \in \Bor(\R) : A \times B \in \Bor(\R^2)\}$ est une tribu contenant les ouverts de $\R$. Que vaut-elle ?
+  \item Soit $B \in \Bor(\R)$. Montrer que $\{A \in \Bor(\R) : A \times B \in \Bor(\R^2)\} = \Bor(\R)$.
+  \item Conclure.
+\end{questions}
+
+\exo{Oscillation et points de continuité}
+Soit $(X,d)$ un espace métrique et $f : X \to \R$ une fonction quelconque. Pour $x\in X$, on pose
+\[
+  \omega_f(x) = \inf_{\delta>0}\ \sup\{|f(t)-f(u)| \;:\; t,u \in B(x,\delta)\} \in [0,+\infty].
+\]
+\begin{questions}
+  \item Montrer que $f$ est continue en $x$ si et seulement si $\omega_f(x) = 0$.
+  \item Montrer que pour tout $\varepsilon > 0$, l'ensemble $\{x\in X : \omega_f(x) < \varepsilon\}$ est un ouvert de $X$.
+  \item En déduire que l'ensemble des points de continuité de $f$ est un borélien de $X$.
+\end{questions}
+
+% ------------------------------------------------------------------
+\section{Applications mesurables}
+
+\exo{Recollement\fond}
+Soient $g,h : (X,\tA) \to (\R,\Bor(\R))$ mesurables et $E \in \tA$. Montrer que la fonction égale à $g$ sur $E$ et à $h$ sur $\Compl{E}$ est mesurable.
+
+\exo{Premiers exemples}
+Montrer que les fonctions suivantes de $\R$ dans $\R$ sont boréliennes :
+\begin{questions}
+  \item $\ind_{\Q}$ ;
+  \item la fonction valant $x^2$ si $x > 0$ et $1-x$ si $x \leq 0$ ;
+  \item toute fonction monotone ;
+  \item la partie entière.
+\end{questions}
+
+\exo{Troncature}
+Soit $f : (X,\tA) \to (\R,\Bor(\R))$ mesurable et $a > 0$. Montrer que la fonction $f_a$, égale à $f$ là où $|f|<a$, à $a$ là où $f \geq a$ et à $-a$ là où $f\leq -a$, est mesurable.
+
+\exo{Prolongement par zéro}
+Soit $E$ un borélien de $\R^d$, muni de sa tribu trace, et $f : E \to \R$. On définit $g : \R^d \to \R$ par $g = f$ sur $E$ et $g = 0$ sur $\Compl{E}$. Montrer que $f$ est mesurable si et seulement si $g$ est mesurable.
+
+\exo{Chiffres binaires}
+Pour $x \in [0,1[$ et $n \geq 1$, on note $b_n(x) = \lfloor 2^n x\rfloor - 2\lfloor 2^{n-1}x\rfloor$ le $n$-ième chiffre de $x$ en base $2$. Montrer que $b_n$ est borélienne.
+
+\exo{Somme sans passer par $\R^2$}
+Soient $f,g : (X,\tA) \to (\R,\Bor(\R))$ mesurables.
+\begin{questions}
+  \item Montrer que $\{x\in X : f(x) < g(x)\} \in \tA$.
+  \item En déduire une preuve de la mesurabilité de $f+g$ qui n'utilise pas $\Bor(\R^2)$.
+\end{questions}
+
+\exo{Ensemble de convergence\fond}
+Soit $(f_n)_n$ une suite de fonctions mesurables de $(X,\tA)$ dans $(\R,\Bor(\R))$, et $C$ l'ensemble des $x \in X$ tels que $(f_n(x))_n$ converge dans $\R$.
+\begin{questions}
+  \item Montrer que $C \in \tA$.
+  \item Montrer que la fonction égale à $\lim_n f_n$ sur $C$ et à $0$ sur $\Compl{C}$ est mesurable.
+\end{questions}
+
+\exo{Fonction et valeur absolue}
+On sait que si $f$ est mesurable, alors $|f|$ l'est aussi. Donner un exemple où $|f|$ est mesurable sans que $f$ le soit.
+
+\exo{$f \circ f$ mesurable $\star$}
+Existe-t-il une fonction $f:\R\to\R$ non borélienne telle que $f\circ f$ soit borélienne ? On pourra utiliser que $\Bor(\R) \neq \Parties(\R)$.
+
+\exo{Une bijection mesurable dont l'inverse ne l'est pas $\star$}
+Soit $\mathcal{T}$ l'ensemble des parties $A \subset \Z$ telles que, pour tout entier $n \geq 1$, on a $3n \in A$ si et seulement si $3n+1 \in A$. On pose $f : \Z \to \Z$, $n \mapsto n+3$.
+\begin{questions}
+  \item Donner un élément de $\mathcal{T}$ et une partie de $\Z$ qui n'est pas dans $\mathcal{T}$.
+  \item Montrer que $\mathcal{T}$ est une tribu sur $\Z$.
+  \item Montrer que $f$ est $(\mathcal{T},\mathcal{T})$-mesurable, mais pas $f^{-1}$.
+\end{questions}
+
+% ------------------------------------------------------------------
+\section{Fonctions étagées}
+
+\exo{Forme canonique\fond}
+Sur $(\R,\Bor(\R))$, on pose $f = \ind_{[0,1]} + 2\cdot\ind_{[\frac12,2]}$. Écrire $f$ sous forme canonique.
+
+\exo{Composée à gauche}
+Soit $f : (X,\tA) \to (\R,\Bor(\R))$ étagée et $g : \R \to \R$ une fonction quelconque. Montrer que $g \circ f$ est étagée, même si $g$ n'est pas borélienne.
+
+\exo{Approximation dyadique à la main\fond}
+Soit $f : \R_+ \to \R_+$, $x \mapsto x$, et $f_n = \min(n,2^{-n}\lfloor 2^n f\rfloor)$.
+\begin{questions}
+  \item Expliciter $f_1$ et $f_2$, et vérifier que $f_1 \leq f_2$.
+  \item Montrer que $(f_n)_n$ converge uniformément vers $f$ sur $[0,1]$, mais pas sur $\R_+$.
+\end{questions}
+
+% ------------------------------------------------------------------
+\clearpage
+\section*{Indications}
+
+\indic{1} Dans une famille finie, il suffit de vérifier le complémentaire et la réunion de deux éléments. Dans le 3, regardez $\{1\}\cup\{2\}$.
+
+\indic{2} Il y a quatre éléments dans chaque tribu. Regardez $\{1\}\cup\{2\}$.
+
+\indic{3} Le passage au complémentaire échange les deux conditions. Pour une réunion, distinguez selon qu'au moins un $A_n$ contient $C$ ou non.
+
+\indic{4} Pour le complémentaire dans $Y$, écrivez $Y \setminus (A\cap Y) = \Compl{A}\cap Y$. Pour la question 2, une intersection de deux éléments de $\tA$ reste dans $\tA$.
+
+\indic{5} Pour une réunion dénombrable, distinguez le cas où tous les $A_n$ sont au plus dénombrables de celui où l'un d'eux a un complémentaire au plus dénombrable. Pour la question 2, écrivez une partie au plus dénombrable comme réunion de singletons. Pour la question 4, cherchez un intervalle qui n'est pas dans $\tC$.
+
+\indic{6} Cherchez la partition la plus fine que l'on peut construire avec des intersections et des complémentaires, puis utilisez l'exercice 9.
+
+\indic{7} Tout repose sur la minimalité de $\sigma$ : une tribu qui contient $\tE$ contient $\sigma(\tE)$.
+
+\indic{8} Calculez $S_{n-1} \cap S_n$, puis écrivez n'importe quelle partie de $\Z$ comme réunion dénombrable.
+
+\indic{9} Montrez que $\tA$ est une tribu contenant les $A_i$, et que toute tribu contenant les $A_i$ contient $\tA$. Pour le cardinal, l'application $J \mapsto \bigcup_{i\in J} A_i$ est injective, car les $A_i$ sont non vides et disjoints.
+
+\indic{10} La description est la même que dans l'exercice 9, avec $J \subset \N$. Pour construire la partition de $\N$, classez les entiers non nuls selon la plus grande puissance de $2$ qui les divise, et placez $0$ dans l'une des classes.
+
+\indic{11} Pour la question 1, l'intersection est dénombrable. Pour la question 2, si $z \in C(x)$, montrez que $C(z) = C(x)$ : l'inclusion $C(z) \subset C(x)$ est directe, et pour l'autre, supposez $x \notin C(z)$ et regardez $C(x) \setminus C(z)$. Pour la question 4, s'il n'y avait qu'un nombre fini de $C(x)$, la tribu serait finie. Il y en a donc une infinité, et ils sont en nombre dénombrable puisqu'ils sont dans $\tA$ : numérotez-les, puis construisez une injection de $\Parties(\N)$ dans $\tA$.
+
+\indic{12} Écrivez $]a,b[$ comme réunion dénombrable d'intervalles $]a,b-\frac{1}{n}]$, puis $]a,b]$ comme intersection dénombrable d'intervalles ouverts. Pour la question 2, écrivez $]a,+\infty[$ comme réunion des $]q,+\infty[$, $q\in\Q$, $q>a$.
+
+\indic{13} 1. C'est une réunion d'ouverts. 2. Le graphe est l'image réciproque de $\{0\}$ par $(x,y)\mapsto y-g(x)$. 3. Écrivez $\Q \times \R$ comme réunion dénombrable de droites. 4. Utilisez le critère de Cauchy, qui donne une écriture de la forme $\bigcap_{k}\bigcup_{N}\bigcap_{p,q\geq N}$.
+
+\indic{14} Pour la question 2, comme dans la preuve de la proposition sur les espaces séparables, placez un rectangle rationnel entre $x$ et une petite boule contenue dans $U$.
+
+\indic{15} Pour la question 1, utilisez l'exercice 14. Pour la question 2, pensez à $A \times \Compl{B} = (A \times \R) \setminus (A \times B)$. La question 3 suit le même schéma en fixant $B$ et en utilisant la question 2.
+
+\indic{16} Pour la question 1, revenez à la définition de la continuité avec $\varepsilon$ et $\delta$. Pour la question 2, si $\omega_f(x) < \varepsilon$, choisissez $\delta$ convenable, et remarquez que si $y \in B(x,\delta)$, alors $B(y,\delta - d(x,y)) \subset B(x,\delta)$. Pour la question 3, écrivez l'ensemble voulu comme $\bigcap_{n\geq 1}\{\omega_f < 1/n\}$.
+
+\indic{17} Écrivez cette fonction $g\,\ind_E + h\,\ind_{\Compl{E}}$.
+
+\indic{18} Pour le 1, $\Q$ est un borélien. Pour le 2, découpez selon $x>0$. Pour le 3, l'image réciproque de $]-\infty,c[$ est un intervalle. Pour le 4, la partie entière est croissante.
+
+\indic{19} Écrivez $f_a = \varphi \circ f$ avec $\varphi$ continue.
+
+\indic{20} Pour $F \in \Bor(\R)$, écrivez $g^{-1}(F)$ à l'aide de $f^{-1}(F)$, en distinguant selon que $0 \in F$ ou non. Dans l'autre sens, $f^{-1}(F) = g^{-1}(F) \cap E$.
+
+\indic{21} Le plus simple est de remarquer que $b_n$ ne prend que les valeurs $0$ et $1$, et qu'elle est constante sur chaque intervalle $[k2^{-n},(k+1)2^{-n}[$.
+
+\indic{22} Pour la question 1, $f(x) < g(x)$ si et seulement s'il existe $q\in\Q$ tel que $f(x) < q < g(x)$. Pour la question 2, $f+g>a$ équivaut à $a-g<f$.
+
+\indic{23} Pour la question 1, utilisez le critère de Cauchy dans $\R$. Pour la question 2, regardez la limite simple de $f_n\,\ind_C$.
+
+\indic{24} Prenez une tribu très petite, comme $\{\emptyset,X\}$.
+
+\indic{25} Cherchez $f$ telle que $f \circ f = \mathrm{id}$. Partez d'une partie non borélienne $S \subset\, ]0,+\infty[$, et changez le signe de $x$ sur $S\cup(-S)$. Il faudra justifier qu'une telle partie $S$ existe.
+
+\indic{26} Pour $f$, regardez $f^{-1}(A) = A - 3$ et utilisez $3n+3 = 3(n+1)$. Pour $f^{-1}$, l'image réciproque de $A$ est $A+3$ : testez $A = \{0\}$.
+
+\indic{27} Découpez $\R$ selon les valeurs prises : les points de changement sont $0$, $\frac12$, $1$ et $2$. Attention à la valeur prise en chacun de ces points.
+
+\indic{28} La fonction $g \circ f$ prend un nombre fini de valeurs. Chacun de ses ensembles de niveau est une réunion finie d'ensembles de niveau de $f$.
+
+\indic{29} Pour la question 1, $f_1$ prend les valeurs $0$, $\frac12$ et $1$. Pour la question 2, sur $[0,1]$, majorez $f-f_n$ pour $n\geq 1$. Sur $\R_+$, regardez ce qui se passe pour $x$ grand : $f_n$ est majorée par $n$, alors que $f$ n'est pas bornée.
+
+\end{document}

@@ -1,0 +1,123 @@
+<Exercice numero="5" titre="Tribu dénombrable – codénombrable">
+
+Soit $X$ un ensemble. On note $\mathcal{C}$ l'ensemble des parties $A \subset X$ telles que $A$ ou $A^c$ soit au plus dénombrable.
+
+1. Montrer que $\mathcal{C}$ est une tribu sur $X$.
+2. Montrer que $\mathcal{C}$ est la tribu engendrée par les singletons de $X$.
+3. Que vaut $\mathcal{C}$ lorsque $X$ est au plus dénombrable ?
+4. On prend $X = \mathbb{R}$. Comparer $\mathcal{C}$ et $\mathcal{B}(\mathbb{R})$.
+
+<Indication>
+
+Pour une réunion dénombrable, distinguez le cas où tous les $A_n$ sont au plus dénombrables de celui où l'un d'eux a un complémentaire au plus dénombrable. Pour la question 2, écrivez une partie au plus dénombrable comme réunion de singletons. Pour la question 4, cherchez un intervalle qui n'est pas dans $\mathcal{C}$.
+
+</Indication>
+
+</Exercice>
+
+<Exercice numero="9" titre="Tribu engendrée par une partition finie">
+
+Soit $(A_1,\dots,A_n)$ une partition de $X$ en parties non vides, et
+
+$$
+\mathcal{A} = \Bigl\{\bigcup_{i\in J} A_i \;:\; J \subset \{1,\dots,n\}\Bigr\}.
+$$
+
+1. Montrer que $\mathcal{A} = \sigma(\{A_1,\dots,A_n\})$.
+2. Montrer que $\mathcal{A}$ possède exactement $2^n$ éléments.
+
+<Indication>
+
+Montrez que $\mathcal{A}$ est une tribu contenant les $A_i$, et que toute tribu contenant les $A_i$ contient $\mathcal{A}$. Pour le cardinal, l'application $J \mapsto \bigcup_{i\in J} A_i$ est injective, car les $A_i$ sont non vides et disjoints.
+
+</Indication>
+
+</Exercice>
+
+<Exercice numero="12" titre="Autres familles génératrices de B(R)">
+
+Montrer que $\mathcal{B}(\mathbb{R})$ est engendrée par chacune des familles suivantes :
+
+1. les intervalles $]a,b]$ avec $a<b$ ;
+2. les intervalles $]q,+\infty[$ avec $q \in \mathbb{Q}$ ;
+3. les fermés de $\mathbb{R}$.
+
+<Indication>
+
+Écrivez $]a,b[$ comme réunion dénombrable d'intervalles $]a,b-\frac{1}{n}]$, puis $]a,b]$ comme intersection dénombrable d'intervalles ouverts. Pour la question 2, écrivez $]a,+\infty[$ comme réunion des $]q,+\infty[$, avec $q\in\mathbb{Q}$ et $q>a$.
+
+</Indication>
+
+</Exercice>
+
+<Exercice numero="13" titre="Reconnaître des boréliens">
+
+1. Montrer que $\{x\in\mathbb{R} : \exists n \in \mathbb{N}^*,\ |x - 1/n| < 1/n^2\}$ est un borélien de $\mathbb{R}$.
+2. Soit $g : \mathbb{R} \to \mathbb{R}$ continue. Montrer que son graphe est un borélien de $\mathbb{R}^2$.
+3. Montrer que $\{(x,y) \in \mathbb{R}^2 : x + y = 1 \text{ et } x \notin \mathbb{Q}\}$ est un borélien de $\mathbb{R}^2$.
+4. Soit $(f_n)_{n\in\mathbb{N}}$ une suite de fonctions continues de $\mathbb{R}^d$ dans $\mathbb{R}$. Montrer que l'ensemble des $x \in \mathbb{R}^d$ tels que la suite $(f_n(x))_n$ converge est un borélien de $\mathbb{R}^d$.
+
+<Indication>
+
+1. C'est une réunion d'ouverts.
+2. Le graphe est l'image réciproque de $\{0\}$ par $(x,y)\mapsto y-g(x)$.
+3. Écrivez $\mathbb{Q} \times \mathbb{R}$ comme réunion dénombrable de droites.
+4. Utilisez le critère de Cauchy, qui donne une écriture de la forme $\bigcap_{k}\bigcup_{N}\bigcap_{p,q\geq N}$.
+
+</Indication>
+
+</Exercice>
+
+<Exercice numero="17" titre="Recollement">
+
+Soient $g,h : (X,\mathcal{A}) \to (\mathbb{R},\mathcal{B}(\mathbb{R}))$ mesurables et $E \in \mathcal{A}$. Montrer que la fonction égale à $g$ sur $E$ et à $h$ sur $E^c$ est mesurable.
+
+<Indication>
+
+Écrivez cette fonction $g\,\mathbf{1}_E + h\,\mathbf{1}_{E^c}$.
+
+</Indication>
+
+</Exercice>
+
+<Exercice numero="23" titre="Ensemble de convergence">
+
+Soit $(f_n)_n$ une suite de fonctions mesurables de $(X,\mathcal{A})$ dans $(\mathbb{R},\mathcal{B}(\mathbb{R}))$, et $C$ l'ensemble des $x \in X$ tels que $(f_n(x))_n$ converge dans $\mathbb{R}$.
+
+1. Montrer que $C \in \mathcal{A}$.
+2. Montrer que la fonction égale à $\lim_n f_n$ sur $C$ et à $0$ sur $C^c$ est mesurable.
+
+<Indication>
+
+Pour la question 1, utilisez le critère de Cauchy dans $\mathbb{R}$. Pour la question 2, regardez la limite simple de $f_n\,\mathbf{1}_C$.
+
+</Indication>
+
+</Exercice>
+
+<Exercice numero="27" titre="Forme canonique">
+
+Sur $(\mathbb{R},\mathcal{B}(\mathbb{R}))$, on pose $f = \mathbf{1}_{[0,1]} + 2\cdot\mathbf{1}_{[\frac12,2]}$. Écrire $f$ sous forme canonique.
+
+<Indication>
+
+Découpez $\mathbb{R}$ selon les valeurs prises : les points de changement sont $0$, $\frac12$, $1$ et $2$. Attention à la valeur prise en chacun de ces points.
+
+</Indication>
+
+</Exercice>
+
+<Exercice numero="29" titre="Approximation dyadique à la main">
+
+Soit $f : \mathbb{R}_+ \to \mathbb{R}_+$, $x \mapsto x$, et $f_n = \min(n,2^{-n}\lfloor 2^n f\rfloor)$.
+
+1. Expliciter $f_1$ et $f_2$, et vérifier que $f_1 \leq f_2$.
+2. Montrer que $(f_n)_n$ converge uniformément vers $f$ sur $[0,1]$, mais pas sur $\mathbb{R}_+$.
+
+<Indication>
+
+Pour la question 1, $f_1$ prend les valeurs $0$, $\frac12$ et $1$. Pour la question 2, sur $[0,1]$, majorez $f-f_n$ pour $n\geq 1$. Sur $\mathbb{R}_+$, regardez ce qui se passe pour $x$ grand : $f_n$ est majorée par $n$, alors que $f$ n'est pas bornée.
+
+</Indication>
+
+</Exercice>

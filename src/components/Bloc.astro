@@ -1,0 +1,7 @@
+---
+const { etiquette, titre, style = 'bloc-plein' } = Astro.props;
+---
+<div class={`bloc ${style}`}>
+  <span class="etiquette">{etiquette}{titre ? ` (${titre})` : ''}.</span>
+  <slot />
+</div>

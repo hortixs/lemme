@@ -1,0 +1,26 @@
+---
+import Base from '../layouts/Base.astro';
+import { lien, lireNiveaux } from '../lib/contenu';
+const niveaux = lireNiveaux();
+---
+<Base>
+  <section class="intro">
+    <h1>Cours et exercices de licence</h1>
+    <p>Pour chaque chapitre : le cours complet, un recueil d'exercices avec indications, et des vidéos.</p>
+  </section>
+  <section class="grille-niveaux" aria-label="Niveaux">
+    {niveaux.map((n) => (
+      <div>
+        <a class="bloc-niveau" href={lien(`/${n.slug}/`)}>
+          <strong>{n.nom}</strong>
+          <span class="mono">{n.annee}</span>
+        </a>
+        <ul class="liste-matieres">
+          {n.matieres.length === 0
+            ? <li><span>À venir</span></li>
+            : n.matieres.map((m) => <li><a href={lien(`/${n.slug}/#${m.slug}`)}>{m.titre}</a></li>)}
+        </ul>
+      </div>
+    ))}
+  </section>
+</Base>

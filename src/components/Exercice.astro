@@ -1,0 +1,7 @@
+---
+const { numero, titre } = Astro.props;
+---
+<article class="exercice">
+  <span class="etiquette">Exercice {numero}{titre ? ` : ${titre}` : ''}</span>
+  <slot />
+</article>

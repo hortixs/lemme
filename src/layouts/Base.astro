@@ -1,0 +1,35 @@
+---
+import 'katex/dist/katex.min.css';
+import '@fontsource-variable/instrument-sans';
+import '@fontsource/ibm-plex-mono/400.css';
+import '@fontsource/ibm-plex-mono/500.css';
+import '../styles/site.css';
+import { lien, lireNiveaux } from '../lib/contenu';
+
+const { titre, niveauActif, description } = Astro.props;
+const niveaux = lireNiveaux();
+const nomSite = 'Ressources de maths';
+---
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{titre ? `${titre} · ${nomSite}` : nomSite}</title>
+    <meta name="description" content={description ?? 'Cours et exercices de mathématiques pour la licence.'} />
+    <link rel="icon" type="image/svg+xml" href={lien('/favicon.svg')} />
+  </head>
+  <body>
+    <div class="page">
+      <header class="entete">
+        <a class="logo" href={lien('/')}>{nomSite}</a>
+        <nav class="niveaux" aria-label="Niveaux">
+          {niveaux.map((n) => (
+            <a href={lien(`/${n.slug}/`)} aria-current={n.slug === niveauActif ? 'page' : undefined}>{n.nom}</a>
+          ))}
+        </nav>
+      </header>
+      <slot />
+    </div>
+  </body>
+</html>

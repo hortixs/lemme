@@ -1,0 +1,138 @@
+---
+titre: Tribus et applications mesurables
+---
+
+## L'idée de Lebesgue
+
+<Remarque>
+
+L'intégrale de Riemann découpe le départ, et elle se comporte mal avec les limites : $\mathbf{1}_{\mathbb{Q}\cap[0,1]}$ est limite simple de fonctions en escalier d'intégrale nulle, sans être Riemann-intégrable. Lebesgue découpe plutôt l'arrivée et regarde les ensembles $f^{-1}([t_i,t_{i+1}[)$. Il faut donc savoir quelles parties on peut mesurer : c'est le rôle des tribus.
+
+</Remarque>
+
+## Tribus
+
+<Definition>
+
+Une famille $\mathcal{A} \subset \mathcal{P}(X)$ est une **tribu** sur $X$ si :
+
+- $\emptyset \in \mathcal{A}$ ;
+- si $B \in \mathcal{A}$, alors $B^c \in \mathcal{A}$ ;
+- pour toute suite $(A_n)_{n\in\mathbb{N}} \in \mathcal{A}^{\mathbb{N}}$, on a $\bigcup_{n\in\mathbb{N}} A_n \in \mathcal{A}$.
+
+Le couple $(X,\mathcal{A})$ est alors un **espace mesurable**.
+
+</Definition>
+
+<Remarque>
+
+Une tribu contient aussi $X$, et elle est stable par intersection dénombrable, par différence et par différence symétrique. Une intersection quelconque de tribus est encore une tribu.
+
+</Remarque>
+
+## Tribu engendrée et boréliens
+
+<Proposition titre="Tribu engendrée">
+
+Pour tout $\mathcal{E} \subset \mathcal{P}(X)$, il existe une plus petite tribu contenant $\mathcal{E}$, notée $\sigma(\mathcal{E})$. Autrement dit, toute tribu qui contient $\mathcal{E}$ contient $\sigma(\mathcal{E})$.
+
+</Proposition>
+
+<Definition>
+
+Si $X$ est un espace topologique, sa **tribu borélienne** est $\mathcal{B}(X) := \sigma(\mathcal{O}(X))$, où $\mathcal{O}(X)$ désigne l'ensemble des ouverts de $X$.
+
+</Definition>
+
+<Proposition>
+
+La tribu $\mathcal{B}(\mathbb{R})$ est engendrée par les intervalles $]a,b[$, et aussi par les demi-droites $]a,+\infty[$, avec $a,b \in \mathbb{R}$.
+
+</Proposition>
+
+## Applications mesurables
+
+<Definition>
+
+Soient $(X,\mathcal{A})$ et $(Y,\mathcal{B})$ deux espaces mesurables. Une application $f : X \to Y$ est **mesurable** si
+
+$$
+\forall F \in \mathcal{B},\quad f^{-1}(F) \in \mathcal{A}.
+$$
+
+</Definition>
+
+<Exemple>
+
+Pour $A \subset X$, la fonction $\mathbf{1}_A : (X,\mathcal{A}) \to (\mathbb{R},\mathcal{B}(\mathbb{R}))$ est mesurable si et seulement si $A \in \mathcal{A}$.
+
+</Exemple>
+
+<Theoreme titre="Critère de mesurabilité">
+
+Soient $(X,\mathcal{A})$ un espace mesurable, $\mathcal{E} \subset \mathcal{P}(Y)$ et $f : X \to Y$. Alors $f$ est $(\mathcal{A},\sigma(\mathcal{E}))$-mesurable si et seulement si
+
+$$
+\forall E \in \mathcal{E},\quad f^{-1}(E) \in \mathcal{A}.
+$$
+
+</Theoreme>
+
+<Remarque>
+
+Il suffit donc de tester la mesurabilité sur une famille génératrice. Deux conséquences à retenir :
+
+- $f : (X,\mathcal{A}) \to (\mathbb{R},\mathcal{B}(\mathbb{R}))$ est mesurable si et seulement si $\{f > a\} \in \mathcal{A}$ pour tout $a \in \mathbb{R}$ ;
+- toute application continue entre espaces topologiques est borélienne.
+
+</Remarque>
+
+## Opérations
+
+<Proposition>
+
+- La composée de deux applications mesurables est mesurable.
+- $f = (f_1,f_2) : (X,\mathcal{A}) \to (\mathbb{R}^2,\mathcal{B}(\mathbb{R}^2))$ est mesurable si et seulement si $f_1$ et $f_2$ le sont.
+- Si $f$ et $g$ sont mesurables à valeurs réelles, alors $f+g$, $fg$, $\max(f,g)$, $\min(f,g)$ et $|f|$ sont mesurables.
+
+</Proposition>
+
+<Proposition>
+
+Si $(f_n)_{n\in\mathbb{N}}$ est une suite de fonctions mesurables à valeurs dans $\overline{\mathbb{R}}$, alors $\sup_n f_n$, $\inf_n f_n$, $\limsup_n f_n$ et $\liminf_n f_n$ sont mesurables. En particulier, une limite simple de fonctions mesurables est mesurable.
+
+</Proposition>
+
+## Fonctions étagées
+
+<Definition>
+
+Une fonction $f : (X,\mathcal{A}) \to \mathbb{R}$ est **étagée** si elle est mesurable et si elle prend un nombre fini de valeurs, c'est-à-dire s'il existe $n \in \mathbb{N}^*$ tel que $f(X) = \{\alpha_1,\dots,\alpha_n\}$, avec $\alpha_i \neq \alpha_j$ pour $i \neq j$.
+
+De façon équivalente, $f$ s'écrit $f = \sum_{i\in I} \alpha_i \mathbf{1}_{A_i}$, avec $I$ fini, où :
+
+- $\bigcup_{i\in I} A_i = X$ et $A_i \cap A_j = \emptyset$ pour tous $i \neq j$ ;
+- $A_i \in \mathcal{A}$ et $\alpha_i \in \mathbb{R}$ pour tout $i \in I$.
+
+Sa **forme canonique** est
+
+$$
+f = \sum_{\alpha \in f(X)} \alpha\, \mathbf{1}_{f^{-1}(\{\alpha\})}.
+$$
+
+</Definition>
+
+<Theoreme titre="Lemme fondamental d'approximation">
+
+Toute fonction mesurable $f : (X,\mathcal{A}) \to \overline{\mathbb{R}}$ est limite simple d'une suite $(f_n)_n$ de fonctions étagées. De plus :
+
+- si $f \geq 0$, on peut choisir $(f_n)_n$ positive et croissante ;
+- si $f$ est bornée, on peut choisir une convergence uniforme.
+
+</Theoreme>
+
+<Remarque>
+
+Pour $f \geq 0$, on peut prendre $f_n = \min\bigl(n,\, 2^{-n}\lfloor 2^n f\rfloor\bigr)$.
+
+</Remarque>

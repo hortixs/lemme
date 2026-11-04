@@ -1,0 +1,12 @@
+node_modules/
+dist/
+.astro/
+public/pdf/
+*.aux
+*.log
+*.out
+*.fls
+*.fdb_latexmk
+*.toc
+*.synctex.gz
+.DS_Store

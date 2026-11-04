@@ -1,0 +1,5 @@
+---
+import Bloc from './Bloc.astro';
+const { titre } = Astro.props;
+---
+<Bloc etiquette="Proposition" titre={titre} style="bloc-plein"><slot /></Bloc>

@@ -1,0 +1,23 @@
+{
+  "name": "lemme",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "predev": "node scripts/copier-pdf.mjs",
+    "dev": "astro dev",
+    "prebuild": "node scripts/copier-pdf.mjs",
+    "build": "astro build",
+    "preview": "astro preview",
+    "pdf": "node scripts/compiler-pdf.mjs"
+  },
+  "dependencies": {
+    "@astrojs/markdown-remark": "^7.3.5",
+    "@astrojs/mdx": "^8.1.2",
+    "@fontsource-variable/instrument-sans": "^5.3.0",
+    "@fontsource/ibm-plex-mono": "^5.3.0",
+    "astro": "^7.4.5",
+    "katex": "0.16.47",
+    "rehype-katex": "^7.0.1",
+    "remark-math": "^6.0.0"
+  }
+}
